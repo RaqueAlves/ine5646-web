@@ -1,8 +1,22 @@
+const senhaInput = document.getElementById('login-password');
+const olho = document.getElementById('olho');
 
 function mostrarSenha() {
-    document.getElementById('login-password').type = 'text';
+    senhaInput.type = 'text';
 }
 
 function ocultarSenha() {
-    document.getElementById('login-password').type = 'password';
+    senhaInput.type = 'password';
 }
+
+olho.addEventListener('click', () => {
+    if (senhaInput.type === 'password') {
+        mostrarSenha();
+    } else {
+        ocultarSenha();
+    }
+});
+
+senhaInput.addEventListener('blur', () => {
+    ocultarSenha();
+});
