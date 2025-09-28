@@ -16,4 +16,18 @@ function mostrarApenasConta() {
     document.getElementById("divHome").classList.add("oculto");
 }
 
+function validaTextoEmBranco(input, statusId, label) {
+    const status = document.getElementById(statusId);
+
+    if (input.value.trim() === "") {
+        status.textContent = `Informe um ${label}.`;
+        status.classList.add("status-fail");
+        status.classList.remove("status-ok");
+    } else {
+        status.textContent = "";
+        status.classList.remove("status-fail");
+        status.classList.add("status-ok");
+    }
+}
+
 mostrarApenasHome();
