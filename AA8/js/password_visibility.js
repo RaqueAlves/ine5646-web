@@ -1,22 +1,16 @@
-const senhaInput = document.getElementById('login-password');
-const olho = document.getElementById('olho');
+document.addEventListener('DOMContentLoaded', () => {
+  const loginBody = document.getElementById('login-body');
 
-function mostrarSenha() {
-    senhaInput.type = 'text';
-}
+  const senhaInput = loginBody.querySelector('#login-password');
+  const olho = loginBody.querySelector('#olho');
 
-function ocultarSenha() {
-    senhaInput.type = 'password';
-}
+  const mostrarSenha = () => { senhaInput.type = 'text'; };
+  const ocultarSenha = () => { senhaInput.type = 'password'; };
 
-olho.addEventListener('click', () => {
-    if (senhaInput.type === 'password') {
-        mostrarSenha();
-    } else {
-        ocultarSenha();
-    }
-});
+  olho.addEventListener('click', () => {
+    if (senhaInput.type === 'password') mostrarSenha();
+    else ocultarSenha();
+  });
 
-senhaInput.addEventListener('blur', () => {
-    ocultarSenha();
+  senhaInput.addEventListener('blur', ocultarSenha);
 });
