@@ -29,7 +29,7 @@ function limparCadastro() {
     
     if (!cadastroDiv) return; 
     
-    cadastroDiv.querySelectorAll("input").forEach(input => input.value = "");
+    cadastroDiv.querySelectorAll("input:not([type='button']):not([type='submit'])").forEach(input => input.value = "");
     cadastroDiv.querySelectorAll("p").forEach(p => { 
         p.textContent = ""; 
         p.classList.remove("status-ok", "status-fail");
@@ -79,5 +79,36 @@ function validarEmail(input) {
         status.textContent = "Informe um e-mail válido."; status.classList.add("status-fail"); status.classList.remove("status-ok"); 
     } 
 }
+
+class Conta { 
+    constructor(nome, sobrenome, cpfObj, email, senha) { 
+        this.nome = nome; 
+        this.sobrenome = sobrenome; 
+        this.cpf = cpfObj; 
+        this.email = email; 
+        this.senha = senha; 
+    } 
+}
+
+document.addEventListener("DOMContentLoaded", () => { 
+    const botaoCadastro = document.querySelector("#areaBotaoConta input[type='button']"); 
+    const nomeInput = document.querySelector("input[onblur*='Nome']"); 
+    const sobrenomeInput = document.querySelector("input[onblur*='Sobrenome']"); 
+    const cpfInput = document.querySelector("input[onblur*='validarCPF']"); const emailInput = document.querySelector("input[onblur*='validarEmail']"); 
+    const senhaInput = document.getElementById("senha"); 
+    
+    if (!botaoCadastro) return; botaoCadastro.addEventListener("click", () => { 
+        const cpfObj = new CPFValidator(cpfInput); 
+        const novaConta = new Conta( 
+            nomeInput.value.trim(), 
+            sobrenomeInput.value.trim(), 
+            cpfObj, emailInput.value.trim(), 
+            senhaInput.value 
+        ); 
+    
+    console.log("Nova conta criada:", novaConta);
+    limparCadastro();
+    });
+});
 
 mostrarApenasHome();

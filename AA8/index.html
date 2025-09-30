@@ -7,12 +7,14 @@
     <link rel="stylesheet" href="./css/style.css">
     <!-- Material Icon CDN -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Scripts -->
     <script src="./js/dropdown.js"></script>
     <script src="./js/script.js" defer></script>
     <script src="./js/password_visibility.js" defer></script>
     <script src="./js/CPFValidator.js" defer></script>
     <script src="./js/passwordValidator.js" defer></script>
     <script src="./js/login.js" defer></script>
+    <script src="./js/cadastro.js" defer></script>
     <title>Prática JavaScript</title>
 </head>
 <body>
@@ -182,7 +184,7 @@
         </div>
 
       <!-- 
-          Div com id nova-conta será a tela de login
+          Div com id nova-conta será a tela de cadastro
          -->
 
       <div id="nova-conta">
@@ -205,7 +207,7 @@
           
           
           <label>E-mail:</label>
-          <input type="text">
+          <input type="text" onblur="validarEmail(this)">
           <p id="statusEmail"></p>
           
           
