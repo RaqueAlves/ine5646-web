@@ -30,4 +30,16 @@ function validaTextoEmBranco(input, statusId, label) {
     }
 }
 
+function validarEmail(input) { 
+    const status = document.getElementById("statusEmail"); 
+    const emailVal = input.value.trim(); 
+    const emailOk = emailVal !== '' && (emailVal.split('@').length - 1) === 1; 
+    
+    if (emailOk) { 
+        status.textContent = ""; status.classList.remove("status-fail"); status.classList.add("status-ok"); 
+    } else { 
+        status.textContent = "Informe um e-mail válido."; status.classList.add("status-fail"); status.classList.remove("status-ok"); 
+    } 
+}
+
 mostrarApenasHome();
