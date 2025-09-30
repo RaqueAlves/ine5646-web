@@ -66,7 +66,7 @@ class CPFValidator {
             return false;
         }
 
-        this.alerta.textContent = "";
+        this.alerta.textContent = "OK";
         this.alerta.classList.remove("status-fail");
         this.alerta.classList.add("status-ok");
         return true;

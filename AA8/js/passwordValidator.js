@@ -50,7 +50,7 @@ class PasswordValidator {
             return false;
         }
 
-        this.alerta.textContent = "";
+        this.alerta.textContent = "OK";
         this.alerta.classList.remove("status-fail");
         this.alerta.classList.add("status-ok");
         return true;
@@ -72,7 +72,7 @@ function validarRepitaSenha(originalInput, repitaInput) {
             alerta.classList.add("status-fail");
             alerta.classList.remove("status-ok");
         } else {
-            alerta.textContent = "";
+            alerta.textContent = "OK";
             alerta.classList.remove("status-fail");
             alerta.classList.add("status-ok");
         }

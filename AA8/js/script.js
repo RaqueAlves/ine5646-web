@@ -2,18 +2,56 @@ function mostrarApenasHome() {
     document.getElementById("nova-conta").classList.add("oculto");
     document.getElementById("login-body").classList.add("oculto");
     document.getElementById("divHome").classList.remove("oculto");
+    
+    limparCadastro(); 
+    limparLogin();
 }
 
 function mostrarApenasLogin() {
     document.getElementById("login-body").classList.remove("oculto");
     document.getElementById("nova-conta").classList.add("oculto");
     document.getElementById("divHome").classList.add("oculto");
+    
+    limparLogin();
+    limparCadastro(); 
 }
 
 function mostrarApenasConta() {
     document.getElementById("nova-conta").classList.remove("oculto");
     document.getElementById("login-body").classList.add("oculto");
     document.getElementById("divHome").classList.add("oculto");
+    
+    limparCadastro(); 
+    limparLogin();
+}
+function limparCadastro() { 
+    const cadastroDiv = document.getElementById("nova-conta"); 
+    
+    if (!cadastroDiv) return; 
+    
+    cadastroDiv.querySelectorAll("input").forEach(input => input.value = "");
+    cadastroDiv.querySelectorAll("p").forEach(p => { 
+        p.textContent = ""; 
+        p.classList.remove("status-ok", "status-fail");
+    }); 
+    
+    const botaoCadastro = cadastroDiv.querySelector("#areaBotaoConta input[type='button']"); 
+    
+    if (botaoCadastro) botaoCadastro.disabled = true; 
+} 
+
+function limparLogin() { 
+    const loginDiv = document.getElementById("login-body"); 
+    
+    if (!loginDiv) return; 
+    loginDiv.querySelectorAll("input").forEach(input => input.value = ""); 
+    loginDiv.querySelectorAll("p").forEach(p => { 
+        p.textContent = ""; p.classList.remove("status-ok", "status-fail"); 
+    }); 
+    
+    const botaoLogin = loginDiv.querySelector("input[type='button'], button"); 
+    
+    if (botaoLogin) botaoLogin.disabled = true; 
 }
 
 function validaTextoEmBranco(input, statusId, label) {
@@ -24,7 +62,7 @@ function validaTextoEmBranco(input, statusId, label) {
         status.classList.add("status-fail");
         status.classList.remove("status-ok");
     } else {
-        status.textContent = "";
+        status.textContent = "OK";
         status.classList.remove("status-fail");
         status.classList.add("status-ok");
     }
@@ -36,7 +74,7 @@ function validarEmail(input) {
     const emailOk = emailVal !== '' && (emailVal.split('@').length - 1) === 1; 
     
     if (emailOk) { 
-        status.textContent = ""; status.classList.remove("status-fail"); status.classList.add("status-ok"); 
+        status.textContent = "OK"; status.classList.remove("status-fail"); status.classList.add("status-ok"); 
     } else { 
         status.textContent = "Informe um e-mail válido."; status.classList.add("status-fail"); status.classList.remove("status-ok"); 
     } 
