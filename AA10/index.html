@@ -7,25 +7,15 @@
     <meta name="mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="INE5646">
-    <link rel="stylesheet" href="./css/style.css">
-
-    <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/vs.min.css">
+    <title>Prática JavaScript Runtime & Async</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/vs.min.css">
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/languages/javascript.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
-
-    <title>Prática JavaScript Runtime & Async</title>
-
-    <script>
-        hljs.highlightAll();
-        hljs.initLineNumbersOnLoad();
-    </script>
 </head>
 <body>
     
 <h1>Lista de exercícios sobre JS Runtime e JS assíncrono</h1>
-
 
 <p>Esta lista tem o objetivo de que vocês testem na prática algumas questões de JavaScript, sob a luz da últimas aulas.</p>
 <p>Para cada um dos exercícios, crie um script que execute o código da questão para você ver na prática o resultado.</p>
@@ -49,36 +39,60 @@ Em especial, sugiro os exercícios 1, 2, 9, 30, 45 e 73.</p>
             <li>a=11, b=25, f=subtrai</li>
         </ul>
     </p>
+    <div class="resposta">
+        <h4>Implementação:</h4>
+        <p>O resultado da implementação pode ser visto no console do navegador.</p>
+    </div>
 </div>
 
 <div class="questao">
     <h2>Exercício 2. Qual a saída no console?</h2>
 
-<pre><code>var callback = function() {
+<pre><code class="javascript">var callback = function() {
     console.log("Estou na função de callback");
-}    
+}     
 console.log("Iniciei")
 setTimeout(callback, 5000);
 console.log("Estou após o setTimeout")
 </code></pre>
+    <div class="resposta">
+        <h4>Resposta:</h4>
+        <p>A saída no console será:</p>
+        <pre><code class="plaintext">Iniciei
+Estou após o setTimeout
+(após 5 segundos)
+Estou na função de callback</code></pre>
+        <p><b>Explicação:</b> O JavaScript não espera o <code>setTimeout</code> terminar. Ele executa <code>console.log("Iniciei")</code>, agenda o callback para ser executado em 5 segundos (enviando-o para as Web APIs do navegador), e imediatamente executa <code>console.log("Estou após o setTimeout")</code>. Apenas quando a call stack (pilha de execução) está vazia e o tempo de 5 segundos passou, o event loop move o callback para a call stack para ser executado.</p>
+    </div>
 </div>
 
 <div class="questao">
     <h2>Exercício 3. Qual a saída do console?</h2>
 
-<pre><code>function consoleAtrasado(mensagem, atraso) {
+<pre><code class="javascript">function consoleAtrasado(mensagem, atraso) {
     setTimeout(console.log(mensagem), atraso)
 }
 console.log("Olá")
 consoleAtrasado("Teste", 10000)
 console.log("Bye")
 </code></pre> 
+    <div class="resposta">
+        <h4>Resposta:</h4>
+        <p>A saída no console será, sem nenhum atraso:</p>
+        <pre><code class="plaintext">Olá
+Teste
+Bye</code></pre>
+        <p><b>Explicação:</b> O erro está na linha <code>setTimeout(console.log(mensagem), atraso)</code>. A função <code>console.log(mensagem)</code> está sendo <b>executada imediatamente</b> e seu valor de retorno (<code>undefined</code>) é passado como o primeiro argumento para o <code>setTimeout</code>. Portanto, "Teste" é impresso sem atraso. O correto seria passar uma função de callback que executa o `console.log`, como demonstrado na correção do exercício 4.</p>
+    </div>
 </div>
 
 <div class="questao">
     <h2>Exercício 4. Correção de código</h2>
-
     <p>Corrija o código do exercício 3 para que a mensagem passada como parâmetro seja exibida no console apenas após o atraso.</p>
+    <div class="resposta">
+        <h4>Implementação:</h4>
+        <p>O código corrigido foi implementado e sua execução pode ser vista no console. A mensagem "Mensagem corrigida após 3s" aparecerá após 3 segundos.</p>
+    </div>
 </div>
 
 
@@ -87,7 +101,7 @@ console.log("Bye")
     <p>Dois colegas seus precisavam escrever um código em JS que deveria escrever "olá" no console e 2 segundos depois escreva "tchau".</p>
     <p>Um dos seus colegas escreveu o seguinte código:</p>
 
-<pre><code>const olaTchau = () => {
+<pre><code class="javascript">const olaTchau = () => {
     console.log("Olá")
     setTimeout(() => console.log("Tchau"), 2000)
 }
@@ -96,7 +110,7 @@ olaTchau()
 
     <p>Seu outro colega escreveu:</p>
     
-<pre><code>const olaETchau = () => {
+<pre><code class="javascript">const olaETchau = () => {
     setTimeout(() => console.log("Tchau"), 2000)
     console.log("Olá")
 }
@@ -104,32 +118,47 @@ olaETchau()
 </code></pre>
     
     <p>Como os códigos estão diferentes, eles pediram a sua opinião para dizer qual dos dois funciona. Qual deles está certo?</p>
+    <div class="resposta">
+        <h4>Resposta:</h4>
+        <p>Ambos os códigos estão corretos e produzem o mesmo resultado.</p>
+        <p><b>Explicação:</b> Em ambas as versões, a chamada <code>console.log("Olá")</code> é síncrona e executa imediatamente. A chamada <code>setTimeout</code> é assíncrona e agenda a execução de <code>console.log("Tchau")</code> para ocorrer após 2 segundos, sem bloquear a thread principal. A ordem em que essas duas linhas aparecem dentro da função não altera o resultado final, pois a operação assíncrona é sempre "delegada" para ser executada mais tarde.</p>
+    </div>
 </div>
 
 <div class="questao">
     <h2>Exercício 6. Qual a saída no console?</h2>
 
-<pre><code>const resolverEm1s = new Promise(resolve => setTimeout(resolve, 1000));
+<pre><code class="javascript">const resolverEm1s = new Promise(resolve => setTimeout(resolve, 1000));
 for (let i = 0; i < 10; i++) {
-    resolverEm1s.then(() => console.log("oi"))            
+    resolverEm1s.then(() => console.log("oi"))              
 }
 </code></pre>
+    <div class="resposta">
+        <h4>Resposta:</h4>
+        <p>Após 1 segundo, a palavra "oi" será impressa no console 10 vezes em rápida sucessão.</p>
+        <p><b>Explicação:</b> Uma única promise (<code>resolverEm1s</code>) é criada. O loop <code>for</code> anexa 10 manipuladores <code>.then()</code> a essa mesma promise. Quando a promise é resolvida após 1 segundo, todos os 10 callbacks são colocados na fila de microtarefas (microtask queue) e executados um após o outro quase que instantaneamente.</p>
+    </div>
 </div>
 
 <div class="questao">
     <h2>Exercício 7. Qual a saída no console?</h2>
 
-<pre><code>const resolverEm1s = new Promise(resolve => setTimeout(resolve, 1000));
+<pre><code class="javascript">const resolverEm1s = new Promise(resolve => setTimeout(resolve, 1000));
 for (let i = 0; i < 10; i++) {
-    resolverEm1s.then(() => console.log(i))            
+    resolverEm1s.then(() => console.log(i))              
 }
 </code></pre>
+    <div class="resposta">
+        <h4>Resposta:</h4>
+        <p>Após 1 segundo, os números de 0 a 9 serão impressos no console em rápida sucessão.</p>
+        <p><b>Explicação:</b> O comportamento é diferente do que se veria se a variável <code>i</code> fosse declarada com <code>var</code>. Como <code>i</code> é declarada com <code>let</code>, ela tem escopo de bloco. Isso significa que a cada iteração do loop, uma nova variável <code>i</code> é criada. O callback do <code>.then()</code> forma um "closure", capturando a instância específica de <code>i</code> daquela iteração. Portanto, quando a promise resolve, cada callback imprime o valor de <code>i</code> que ele capturou (0, 1, 2, ..., 9).</p>
+    </div>
 </div>
 
 <div class="questao">
     <h2>Exercício 8. Qual a saída no console?</h2>
 
-<pre><code>let i=0
+<pre><code class="javascript">let i=0
 let max = 10
 function p() {
     pp = new Promise(resolve => setTimeout(resolve, 1000))
@@ -143,12 +172,156 @@ function p() {
 }        
 p()
 </code></pre>
+    <div class="resposta">
+        <h4>Resposta:</h4>
+        <p>Os números de 0 a 9 serão impressos no console, um a cada segundo.</p>
+        <pre><code class="plaintext">0
+(1 segundo depois)
+1
+(1 segundo depois)
+2
+...
+9</code></pre>
+        <p><b>Explicação:</b> A função <code>p</code> é recursiva de uma forma assíncrona. Ela cria uma promise que resolve em 1 segundo. Quando resolve, ela imprime <code>i</code>, incrementa-o e, se <code>i</code> ainda for menor que 10, chama a si mesma novamente. Isso cria uma cadeia de promises que se resolvem sequencialmente a cada segundo, resultando em um log por segundo.</p>
+    </div>
 </div>
 
 <div class="questao">
     <h2>Exercício 9. Modificação de código</h2>
     <p>Modifique o código da questão 8 para usar async/await.</p>
+    <div class="resposta">
+        <h4>Implementação:</h4>
+        <p>O código foi refatorado usando <code>async/await</code> para maior legibilidade. O resultado no console será o mesmo do exercício 8, mas a implementação é mais limpa. Veja o console para a saída.</p>
+    </div>
 </div>
+
+<script>
+    // Inicializa o Syntax Highlighter
+    hljs.highlightAll();
+    hljs.initLineNumbersOnLoad();
+
+    // Início da implementação dos exercícios
+
+    console.log("--- Executando Exercícios ---");
+
+    // --- Exercício 1 ---
+    console.log("\n--- Exercício 1 ---");
+    const calculadora = (a, b, f) => f(a, b);
+    const soma = (a, b) => a + b;
+    const subtrai = (a, b) => a - b;
+
+    console.log("Resultado de 31 + 12:", calculadora(31, 12, soma));
+    console.log("Resultado de 11 - 25:", calculadora(11, 25, subtrai));
+    
+    // --- Exercício 2 (Demonstração) ---
+    console.log("\n--- Exercício 2 ---");
+    var callbackEx2 = function() {
+        console.log("Exercício 2: Estou na função de callback");
+    }     
+    console.log("Exercício 2: Iniciei")
+    setTimeout(callbackEx2, 5000);
+    console.log("Exercício 2: Estou após o setTimeout")
+
+    // --- Exercício 3 (Demonstração) ---
+    console.log("\n--- Exercício 3 ---");
+    function consoleAtrasadoEx3(mensagem, atraso) {
+        // A função console.log é EXECUTADA imediatamente aqui
+        setTimeout(console.log(mensagem), atraso)
+    }
+    console.log("Exercício 3: Olá")
+    consoleAtrasadoEx3("Exercício 3: Teste", 10000)
+    console.log("Exercício 3: Bye")
+
+
+    // --- Exercício 4 ---
+    console.log("\n--- Exercício 4 ---");
+    function consoleAtrasadoCorrigido(mensagem, atraso) {
+        // Passamos uma arrow function como callback, que será executada após o atraso
+        setTimeout(() => {
+            console.log(mensagem);
+        }, atraso);
+    }
+    consoleAtrasadoCorrigido("Exercício 4: Mensagem corrigida após 3s", 3000);
+
+    // --- Exercício 5 (Demonstração) ---
+    console.log("\n--- Exercício 5 ---");
+    console.log("Executando a primeira versão:");
+    const olaTchau = () => {
+        console.log("Olá")
+        setTimeout(() => console.log("Tchau (versão 1)"), 2000)
+    }
+    olaTchau();
+    
+    // Atraso para separar visualmente as execuções no console
+    setTimeout(() => {
+        console.log("\nExecutando a segunda versão:");
+        const olaETchau = () => {
+            setTimeout(() => console.log("Tchau (versão 2)"), 2000)
+            console.log("Olá")
+        }
+        olaETchau();
+    }, 100); // pequeno atraso para não misturar os logs no console
+    
+
+    // --- Exercício 6 (Demonstração) ---
+    setTimeout(() => { // Atraso para não sobrepor com os logs anteriores
+        console.log("\n--- Exercício 6 ---");
+        const resolverEm1sEx6 = new Promise(resolve => setTimeout(resolve, 1000));
+        for (let i = 0; i < 10; i++) {
+            resolverEm1sEx6.then(() => console.log("Exercício 6: oi"))              
+        }
+    }, 2200);
+
+
+    // --- Exercício 7 (Demonstração) ---
+    setTimeout(() => {
+        console.log("\n--- Exercício 7 ---");
+        const resolverEm1sEx7 = new Promise(resolve => setTimeout(resolve, 1000));
+        for (let i = 0; i < 10; i++) {
+            resolverEm1sEx7.then(() => console.log(`Exercício 7: ${i}`))              
+        }
+    }, 3300);
+
+
+    // --- Exercício 8 (Demonstração) ---
+    setTimeout(() => {
+        console.log("\n--- Exercício 8 ---");
+        let i_ex8 = 0;
+        let max_ex8 = 10;
+        function p_ex8() {
+            let pp = new Promise(resolve => setTimeout(resolve, 1000))
+            pp.then(() => {
+                console.log(`Exercício 8: ${i_ex8++}`)
+                if (i_ex8 < max_ex8) {
+                    return p_ex8()
+                }
+            })
+            return pp
+        }        
+        p_ex8()
+    }, 4400);
+
+    
+    // --- Exercício 9 ---
+    setTimeout(() => {
+        console.log("\n--- Exercício 9 ---");
+        
+        // Função auxiliar que retorna uma promise resolvida após 'ms' milissegundos
+        const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+        async function contadorAsync() {
+            console.log("Exercício 9 (async/await): Iniciando contador...");
+            for (let i = 0; i < 10; i++) {
+                await delay(1000); // Pausa a execução da função por 1 segundo
+                console.log(`Exercício 9: ${i}`);
+            }
+            console.log("Exercício 9 (async/await): Contador finalizado.");
+        }
+
+        contadorAsync();
+    }, 15000); // Começa a executar após o exercício 8 terminar
+
+</script>
 
 </body>
 </html>
